@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Salary Calculator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    table {
+        width: 80%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    input {
+        width: 90%;
+        padding: 5px;
+        text-align: center;
+    }
+    button {
+        padding: 8px 12px;
+        margin-top: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+</head>
+<body>
+
+<h2>Salary & Expenses Tracker</h2>
+
+<button id="addRowBtn">+ Add Row</button>
+
+<table id="salaryTable">
+    <thead>
+        <tr>
+            <th>Person Name</th>
+            <th>Salary</th>
+            <th>Amount Spent</th>
+            <th>Remaining Salary</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><input type="text" placeholder="Enter name"></td>
+            <td><input type="number" placeholder="0" class="salary"></td>
+            <td><input type="number" placeholder="0" class="spent"></td>
+            <td><input type="text" readonly class="remaining"></td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+    function calculateRemaining() {
+        const rows = document.querySelectorAll("#salaryTable tbody tr");
+        rows.forEach(row => {
+            const salary = parseFloat(row.querySelector(".salary").value) || 0;
+            const spent = parseFloat(row.querySelector(".spent").value) || 0;
+            row.querySelector(".remaining").value = (salary - spent).toFixed(2);
+        });
+    }
+
+    function attachCalculationEvents(row) {
+        row.querySelector(".salary").addEventListener("input", calculateRemaining);
+        row.querySelector(".spent").addEventListener("input", calculateRemaining);
+    }
+
+    // Attach to initial row
+    attachCalculationEvents(document.querySelector("#salaryTable tbody tr"));
+
+    // Add new row functionality
+    document.getElementById("addRowBtn").addEventListener("click", () => {
+        const tbody = document.querySelector("#salaryTable tbody");
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+            <td><input type="text" placeholder="Enter name"></td>
+            <td><input type="number" placeholder="0" class="salary"></td>
+            <td><input type="number" placeholder="0" class="spent"></td>
+            <td><input type="text" readonly class="remaining"></td>
+        `;
+        tbody.appendChild(newRow);
+        attachCalculationEvents(newRow);
+    });
+</script>
+</body>
+</html>
